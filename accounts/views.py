@@ -117,7 +117,7 @@ def get_cards(request):
         messages.success(request, "Coupon applied")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
-    if cart_obj:
+    if cart_obj and cart_obj.get_cart_total() * 100 > 0:
         client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.RAZOR_PAY_KEY_SECRET))
         payment = client.order.create({'amount': cart_obj.get_cart_total() * 100, 'currency': 'INR', 'payment_capture':1})
         cart_obj.razor_pay_order_id = payment['id']

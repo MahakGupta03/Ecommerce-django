@@ -1,5 +1,7 @@
 {% extends "Base/base.html" %} 
 {%block start%}
+{% load socialaccount %}
+
 
   <!-- <form class="container" method="post" >
       {% csrf_token %}
@@ -76,6 +78,9 @@
 
           <p class="text-center mb-0">
             If you do not have account. <a href="{% url 'register' %}">Register Now</a>
+          </p>
+          <p class="text-center mb-0">
+            <a href="{% provider_login_url 'google'%}?next=/">Signin with Google</a>
           </p>
         </form>
       </div>
