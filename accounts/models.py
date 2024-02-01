@@ -31,7 +31,7 @@ class Cart(BaseModel):
         cart_items = self.cart_items.all()
         price=[]
         for cart_item in cart_items:
-            price.append(cart_item.product.price)
+            price.append(cart_item.product.price*cart_item.itemQyt)
 
         if self.coupon:
             if self.coupon.minimum_price < sum(price):
@@ -45,11 +45,27 @@ class Cart(BaseModel):
 class CartItems(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="cart_items")
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
-
+    itemQyt =  models.PositiveIntegerField(default=1)
     def get_product_price(self):
         price = [self.product.price]
 
-        return sum(price)
+        return sum(price)*self.itemQyt
+        # return self.product.price*self.itemQyt
+    
+    def get_product_count(self):
+        count = self.itemQyt
+
+        return count
+        
+
+class Order(BaseModel):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    email = models.EmailField(max_length = 254)
+    address = models.CharField(max_length=250, null=False, blank=False)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    state = models.CharField(max_length=100, null=False, blank=False)
+    zip_code = models.CharField(max_length=100, null=False, blank=False)
+    phone = models.IntegerField() 
 
 
 
